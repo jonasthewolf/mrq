@@ -1,11 +1,11 @@
-
+#[macro_use] extern crate log;
 extern crate clap;
-extern crate regex;
+
 
 use clap::{Arg, App};
-use std::fs::File;
-use std::io::prelude::*;
-use regex::RegexBuilder;
+
+
+mod checker;
 
 // Add
 //   Replace <new> with new ID
@@ -29,20 +29,6 @@ use regex::RegexBuilder;
 // Enumerate
 //   Especially helpful for e.g. detailed design (first time use)
 // Upgrade config
-fn check(filename : &str) {
-    let mut f = File::open(filename).expect("file not found");
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)
-        .expect("something went wrong reading the file");
-    let re = RegexBuilder::new(r"(\{[A-Z]+\-[0-9]+\s+.*\n*.*\n*\})")
-                .multi_line(true)
-                .dot_matches_new_line(true)
-                .build()
-                .unwrap();
-    for x in re.captures_iter(&contents) {
-        println!("{:?}", x);
-    }
-}
 
 fn main() {
     let matches = App::new("Markdown Requirements Management Tool")
@@ -60,8 +46,8 @@ fn main() {
                                .index(2))
                           .get_matches();
     match matches.value_of("command").unwrap().as_ref() {
-        "check" => check(matches.value_of("filename").unwrap()),
+        "check" => checker::check_single_file(matches.value_of("filename").unwrap(), None),
         _ => println!("something else")
     }
-    println!("Hello, world!");
+    
 }

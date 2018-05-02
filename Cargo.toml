@@ -6,3 +6,4 @@ authors = ["jonas"]
 [dependencies]
 clap = "2.31.2"
 regex = "0.2"
+log = "0.4.1"
