@@ -1,0 +1,4 @@
+[mandatory-attributes]
+Title = ".*" 
+Type = ["Software Requirements Specification"]
+Status = ["Draft", "Released"]

@@ -17,7 +17,7 @@ struct SpecificationContext {
 }
 
 static _SPEC_ATTRIBUTE_REGEX : &str = r"";
-static REQ_REGEX : &str = r"(?msU)(\{(?P<reqid>(?P<idprefix>[A-Z]+)\-(?P<reqnum>[0-9]+))\s+(?P<reqtitle>.*)\s*\n+(?P<reqtext>.*\n*.*\n*)\})";
+static REQ_REGEX : &str = r"(?msU)(\{(?P<reqid>(?P<idprefix>[A-Z]+[A-Z\-]+)(?P<reqnum>[0-9]+))\s+(?P<reqtitle>.*)\s*\n+(?P<reqtext>.*\n*.*\n*)\})";
 
 pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) {
     let mut context = SpecificationContext { 
@@ -43,7 +43,7 @@ pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) 
     for x in re.captures_iter(&contents) {
         if x["idprefix"] != context.req_prefix {
             error += 1;
-            println!("Error: Prefix is not consistent within file: Requirement {:?} should start with {}.", &x["reqid"], context.req_prefix);
+            println!("Error: Prefix is not consistent within file: Requirement {:?} should start with {:?}.", &x["reqid"], context.req_prefix);
         }
     }
 
@@ -56,7 +56,7 @@ pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) 
     }
     for (id, count) in numbers {
         if count > 1 {
-            println!("Error: Duplicate Requirement ID: Requirement with ID {}-{} occurs with count {}.", context.req_prefix, id, count);
+            println!("Error: Duplicate Requirement ID: Requirement with ID \"{}{}\" occurs with count {}.", context.req_prefix, id, count);
             error += 1;
         }
     }
@@ -82,7 +82,7 @@ mod tests {
     #[test]
     fn duplicate_id() {
         let output = Command::new("./target/debug/mrq")
-            .args(&["check", "test/test_duplicate_id.md"])
+            .args(&["check", "test/test_reqid_duplicate.md"])
             .output()
             .expect("failed to execute process");
     
