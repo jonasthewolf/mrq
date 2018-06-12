@@ -4,20 +4,28 @@ Status: Draft
 
 *History*
 
-| Version | Date       | Author            | Change            |
-|---------|------------|-------------------|-------------------|
-| 1.0.0   | 2018-04-30 | jonas.wolf@gmx.eu | Initial version   | 
+| Version | Date       | Author            | Change                    |
+|---------|------------|-------------------|---------------------------|
+| 1.0.0   | 2018-04-30 | jonas.wolf@gmx.eu | Initial version           | 
+| 1.1.0   | 2018-06-12 | jonas.wolf@gmx.eu | Update to be more precise |
 
 
 # Services
 {MRQ-1 *MRQ shall provide a service to add a new requirement.*  
-Adding means replacing a requirement identifier ending with `<new>` with the next free integer. 
-If the word new is followed by an integer, all references to `<new>` with the same identifier will be replaced with the same requirement identifier. 
+ Adding means replacing a requirement identifier ending with `<new>` with the next free integer. 
+ If the word new is followed by an integer, all references to `<new>` with the same identifier will be replaced with the same requirement identifier. 
+#type:functional }
 
-#type:functional  
-}
+{MRQ-2 *MRQ shall provide a service to check a requirement specificiation for well-formdness.*
+ Well-formedness means a consistent requirement prefix is used. 
+ The requirement prefix can either be defined by configuration or by the first requirement in the specification.
+ #type:functional }
 
-{MRQ-2 *MRQ shall provide a service to check a requirement specificiation.*
+{MRQ-3 *MRQ shall provide a service to check a requirement specificiation for duplicate requirement IDs.*
+ Duplicate requirements can either exist within one specification or within a set of specifications.
+ #type:functional }
+
+{MRQ-4 *MRQ shall provide a service to check a requirement specificiation.*
 
 The check shall include the following topics:
 - Well-formedness
@@ -27,6 +35,8 @@ The check shall include the following topics:
 - Mandatory attributes set
   - Per Requirement
   - Per Document  
+
+#type:functional
 }
 
 Remove

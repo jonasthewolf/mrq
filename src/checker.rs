@@ -14,16 +14,33 @@ pub struct ProjectFileContext {
 struct SpecificationContext {
     req_prefix : String,
     _config : Option<String>,
+    new_lines : Vec<u32>,
+}
+
+impl SpecificationContext {
+    pub fn new() -> SpecificationContext {
+        SpecificationContext { 
+                        req_prefix: "".to_string(), 
+                        _config: None,
+                        new_lines: Vec::new()
+                      }
+    }
+    pub fn find_line(&self, what : &regex::Match) -> u32 {
+        let x = what.start() as u32;
+        self.new_lines.binary_search(&x).err().unwrap() as u32 + 1
+    }
 }
 
 static _SPEC_ATTRIBUTE_REGEX : &str = r"";
 static REQ_REGEX : &str = r"(?msU)(\{(?P<reqid>(?P<idprefix>[A-Z]+[A-Z\-]+)(?P<reqnum>[0-9]+))\s+(?P<reqtitle>.*)\s*\n+(?P<reqtext>.*\n*.*\n*)\})";
 
+fn map_lines(context : &mut SpecificationContext, contents : &String) {
+    let re = Regex::new(r"(\n)").unwrap();
+    re.captures_iter(&contents).for_each( |m| { context.new_lines.push(m.get(1).unwrap().start() as u32 ) });
+}
+
 pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) {
-    let mut context = SpecificationContext { 
-                        req_prefix: "".to_string(), 
-                        _config: None
-                      };
+    let mut context = SpecificationContext::new();
 
     // Inherit configuration from parent
 
@@ -32,6 +49,8 @@ pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) 
     f.read_to_string(&mut contents).expect("Something went wrong reading the file.");
     // TODO Improve and extract to file
     let re = Regex::new(REQ_REGEX).unwrap();
+
+    map_lines(&mut context ,&contents);
 
     let mut error = 0u32;
 
@@ -43,7 +62,7 @@ pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) 
     for x in re.captures_iter(&contents) {
         if x["idprefix"] != context.req_prefix {
             error += 1;
-            println!("Error: Prefix is not consistent within file: Requirement {:?} should start with {:?}.", &x["reqid"], context.req_prefix);
+            println!("Error: Prefix is not consistent within file: Requirement {:?} [line:{:?}] should start with {:?}.", &x["reqid"], context.find_line(&x.get(1).unwrap()), context.req_prefix);
         }
     }
 
