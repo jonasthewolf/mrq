@@ -30,6 +30,8 @@ mod checker;
 //   Especially helpful for e.g. detailed design (first time use)
 // Upgrade config
 
+static MAIN_TOML_FILE : &str = "mrq.toml";
+
 fn main() {
     let matches = App::new("Markdown Requirements Management Tool")
                           .version("1.0")
@@ -41,13 +43,38 @@ fn main() {
                                .required(true)
                                .index(1))
                           .arg(Arg::with_name("filename")
-                               .help("")
+                               .help("Filename(s) of specification(s) or path where all .md files are processed")
                                .required(false)
+                               .multiple(true)
                                .index(2))
+                          .arg(Arg::with_name("wildcard")
+                               .short("w")
+                               .long("wildcard")
+                               .help("Search for *.md instead of looking for mrq.toml")
+                               .required(false)
+                               .takes_value(true)
+                               .default_value("*.md"))
                           .get_matches();
-    match matches.value_of("command").unwrap().as_ref() {
-        "check" => checker::check_single_file(matches.value_of("filename").unwrap(), None),
-        _ => println!("something else")
+    
+    if matches.is_present("filename") {
+        let path = matches.value_of("filename").unwrap();
+        // Four options here:
+        // 1. Specification file (e.g. path/to/spec.md)
+        // 2. Top-level project file (e.g. path/to/non_standard.toml)
+        // 3. Wildcard of specification files (e.g. /path/to/*.md)
+        // 4. Path to directory without filename (search for top-level file or wildcard if set) 
+        match matches.value_of("command").unwrap().as_ref() {
+            "check" => checker::check_single_file(path, None),
+            _ => println!("something else")
+        }
+    } else {
+        if matches.occurrences_of("wildcard") == 1 {
+            println!("{}", matches.value_of("wildcard").unwrap());
+        } else {
+            // mrq.toml in current working directory
+            println!("mrq.toml");
+        }
     }
+
     
 }

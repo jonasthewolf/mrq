@@ -1,4 +1,6 @@
-[mandatory-attributes]
-Title = ".*" 
+[mandatory-attributes.spec]
 Type = ["Software Requirements Specification"]
 Status = ["Draft", "Released"]
+
+[mandatory-attributes.req]
+type = ["functional", "non-functional"]

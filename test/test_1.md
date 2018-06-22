@@ -1,6 +1,6 @@
-Title: Markdown Requirements Management Tool
-Type: Software Requirements Specification
-Status: Draft
+# Markdown Requirements Management Tool
+- Type: Software Requirements Specification
+- Status: Draft
 
 *History*
 
@@ -10,7 +10,7 @@ Status: Draft
 | 1.1.0   | 2018-06-12 | jonas.wolf@gmx.eu | Update to be more precise |
 
 
-# Services
+## Services
 {MRQ-1 *MRQ shall provide a service to add a new requirement.*  
  Adding means replacing a requirement identifier ending with `<new>` with the next free integer. 
  If the word new is followed by an integer, all references to `<new>` with the same identifier will be replaced with the same requirement identifier. 
@@ -52,7 +52,7 @@ Enumerate
   Especially helpful for e.g. detailed design (first time use)
 Upgrade config
 
-# Use cases
+## Use cases
 
 - Attribute per Hashtag
 - Requirement per Absatz
@@ -62,7 +62,7 @@ Upgrade config
   - Projektfile/Specfile verweist auf Config
 - Caching basiernd auf Hash pro Projektfile
 
-# Metamodel
+## Metamodel
 - Metamodell
   - Projektfile
     - Projektfile #opt
@@ -70,7 +70,7 @@ Upgrade config
     - Specfiles
       - Configfile #opt
 
-# Other
+## Other
 If no config is given in Specfile (and nothing is inherited, i.e. the absolute default), the following applies:
  - The first identifier between `{` and `<space>` in the form of [A-Z]{2}[A-Z`\`-]+[(`<new>`|`\`d+)] is used for the prefix of the specification.  
   The configuration attribute would be ``Prefix:``
