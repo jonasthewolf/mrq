@@ -32,7 +32,9 @@ impl SpecificationContext {
 }
 
 static _SPEC_ATTRIBUTE_REGEX : &str = r"";
-static REQ_REGEX : &str = r"(?msU)(\{(?P<reqid>(?P<idprefix>[A-Z]+[A-Z\-]+)(?P<reqnum>[0-9]+))\s+(?P<reqtitle>.*)\s*\n+(?P<reqtext>.*\n*.*\n*)\})";
+static REQ_ID_REGEX : &str = r"(?P<reqid>(?P<idprefix>[A-Z]+[A-Z\-]+)(?P<reqnum>[0-9]+))";
+static REQ_TITLE_REGEX : &str = r"(?P<reqtitle>.*)";
+static REQ_TEXT_REGEX : &str = r"(?P<reqtext>.*\n*.*\n*)";
 
 fn map_lines(context : &mut SpecificationContext, contents : &String) {
     let re = Regex::new(r"(\n)").unwrap();
@@ -40,6 +42,8 @@ fn map_lines(context : &mut SpecificationContext, contents : &String) {
 }
 
 pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) {
+    let reg_ex : &str = &format!(r"(?msU)(\{{\s*{}\s+{}\s*\n+{}\}})", REQ_ID_REGEX, REQ_TITLE_REGEX, REQ_TEXT_REGEX);
+
     let mut context = SpecificationContext::new();
 
     // Inherit configuration from parent
@@ -48,7 +52,7 @@ pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) 
     let mut contents = String::new();
     f.read_to_string(&mut contents).expect("Something went wrong reading the file.");
     // TODO Improve and extract to file
-    let re = Regex::new(REQ_REGEX).unwrap();
+    let re = Regex::new(reg_ex).unwrap();
 
     map_lines(&mut context ,&contents);
 
