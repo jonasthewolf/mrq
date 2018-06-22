@@ -66,7 +66,7 @@ pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) 
     for x in re.captures_iter(&contents) {
         if x["idprefix"] != context.req_prefix {
             error += 1;
-            error!("Error: Prefix is not consistent within file: Requirement {:?} [line:{:?}] should start with {:?}.", &x["reqid"], context.find_line(&x.get(1).unwrap()), context.req_prefix);
+            println!("Error: Prefix is not consistent within file: Requirement {:?} [line:{:?}] should start with {:?}.", &x["reqid"], context.find_line(&x.get(1).unwrap()), context.req_prefix);
         }
     }
 
@@ -79,7 +79,7 @@ pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) 
     }
     for (id, count) in numbers {
         if count > 1 {
-            error!("Error: Duplicate Requirement ID: Requirement with ID \"{}{}\" occurs with count {}.", context.req_prefix, id, count);
+            println!("Error: Duplicate Requirement ID: Requirement with ID \"{}{}\" occurs with count {}.", context.req_prefix, id, count);
             error += 1;
         }
     }
