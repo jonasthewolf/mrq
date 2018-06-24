@@ -2,9 +2,11 @@ extern crate regex;
 
 
 use std::fs::File;
+use std::path::PathBuf;
 use std::io::prelude::*;
 use std::collections::HashMap;
 use self::regex::Regex;
+
 
 
 pub struct ProjectFileContext {
@@ -39,6 +41,11 @@ static REQ_TEXT_REGEX : &str = r"(?P<reqtext>.*\n*.*\n*)";
 fn map_lines(context : &mut SpecificationContext, contents : &String) {
     let re = Regex::new(r"(\n)").unwrap();
     re.captures_iter(&contents).for_each( |m| { context.new_lines.push(m.get(1).unwrap().start() as u32 ) });
+}
+
+pub fn check_inputs(inputs : Vec<PathBuf>, project_inputs : Option<PathBuf>) {
+//                project::process_project_file(MAIN_TOML_FILE);
+    inputs.into_iter().for_each(|x| check_single_file(x.to_str().unwrap(), None));
 }
 
 pub fn check_single_file(filename : &str, _parent : Option<ProjectFileContext>) {
