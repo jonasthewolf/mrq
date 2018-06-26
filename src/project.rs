@@ -1,5 +1,5 @@
 
 
-pub fn process_project_file(filename : &str) {
+pub fn _process_project_file(filename : &str) {
     println!("{}", filename);
 }

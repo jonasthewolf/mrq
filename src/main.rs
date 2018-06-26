@@ -1,6 +1,7 @@
-#[macro_use] extern crate log;
 extern crate clap;
 extern crate glob;
+extern crate codespan;
+extern crate codespan_reporting;
 
 use clap::{Arg, App};
 use std::path::{Path, PathBuf};
