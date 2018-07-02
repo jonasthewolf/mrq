@@ -68,22 +68,23 @@ pub fn check_single_file(filename: &PathBuf, _parent: Option<ProjectFileContext>
     // TODO Refactor to visitor pattern
 
     // Check for inconsistent prefix
-    context.req_prefix = Some(re.captures(&contents).unwrap().get(1).unwrap());
+    context.req_prefix = Some(re.captures(&contents).unwrap().name("idprefix").unwrap());
     for x in re.captures_iter(&contents) {
         if x["idprefix"] != context.req_prefix.unwrap().as_str().to_owned() {
             error += 1;
-            let xmatch = x.get(1).unwrap();
+            let xmatch = x.name("idprefix").unwrap();
             let span = Span::new(ByteIndex(xmatch.start() as u32 + 1u32), 
                                 ByteIndex(xmatch.end() as u32 + 1u32));
             let error = Diagnostic::new(Severity::Error, "Prefix is not consistent within file")
                 .with_label(
                     Label::new_primary(span)
                         .with_message("This is the inconsistent prefix"),
+                )
+                .with_label(
+                    Label::new_secondary(Span::new(ByteIndex(context.req_prefix.unwrap().start() as u32 + 1u32), 
+                                                   ByteIndex(context.req_prefix.unwrap().end() as u32 + 1u32)))
+                        .with_message("This is the expected prefix"),
                 );
-                // .with_label(
-                //     Label::new_secondary(Span::from_offset(str_start, 2.into()))
-                //         .with_message("This is the expected prefix"),
-                // );
             let writer = StandardStream::stderr(ColorChoice::Auto);
             emit(&mut writer.lock(), &code_map, &error).unwrap();
             //println!("Error: Prefix is not consistent within file: Requirement {:?} [line:{:?}] should start with {:?}.", &x["reqid"], context.find_line(&x.get(1).unwrap()), context.req_prefix);
