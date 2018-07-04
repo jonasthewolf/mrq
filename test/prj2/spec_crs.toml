@@ -1,0 +1,5 @@
+
+[[Specification]]
+Type = "CRS"
+IdPrefix = "CREQ"
+MandatoryAttributes = { ReqType = ["Functional", "NonFunctional"], IntegrityLevel = ["QM", "ASIL_A", "ASIL_B", "ASIL_C", "ASIL_D"] }

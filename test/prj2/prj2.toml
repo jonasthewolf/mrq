@@ -1,0 +1,13 @@
+[Project]
+Title = "Test Project"
+InputFiles = [ "*.md", "*.c" ]
+
+[[Specification]]
+MandatoryAttributes = { Type = ["CRS", "CTS", "SM" ] }
+
+[[Specification.CTS]]
+IdPrefix = "TCASE"
+MandatoryAttributes = { Verifies = "((CREQ-[0-9]+)|(DSGN-[0-9]+))" }
+
+[[Specification.SM]]
+IdPrefix = "SMI"
